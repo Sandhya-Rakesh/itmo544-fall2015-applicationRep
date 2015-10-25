@@ -22,22 +22,29 @@
       'version' => 'latest',
       'region'  => 'us-west-2'
   ]);
-  $s3->createBucket(array('Bucket' => 'sandbucket'));
+
   # AWS PHP SDK version 3 create bucket
   $result = $s3->createBucket([
       'ACL' => 'public-read',
-      'Bucket' => $bucket
+      'Bucket' => 'nankurunaisa'
   ]);
+  
   $s3->waitUntil('BucketExists', array('Bucket' => $bucket));
-
-  # PHP version 3
-  $result = $s3->putObject([
+  
+  try 
+  {
+    // Upload data.
+    $result = $s3->putObject([
       'ACL' => 'public-read',
       'Bucket' => $bucket,
       'Key' => $uploadfile
-  ]);  
+    ]); 
 
-  $url = $result['ObjectURL'];
-  echo $url;
-
+    // Print the URL to the object.
+    $url = $result['ObjectURL'];
+    echo $url;
+  } catch (S3Exception $e) {
+    echo $e->getMessage() . "\n";
+  }
+  
 ?>

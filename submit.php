@@ -23,10 +23,12 @@
       'region'  => 'us-west-2'
   ]);
 
+  $bucket="nankurunaisa"
+
   # AWS PHP SDK version 3 create bucket
   $result = $s3->createBucket([
       'ACL' => 'public-read',
-      'Bucket' => 'nankurunaisa'
+      'Bucket' => $bucket
   ]);
   
   $s3->waitUntil('BucketExists', array('Bucket' => $bucket));

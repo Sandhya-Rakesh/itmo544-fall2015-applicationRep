@@ -58,8 +58,9 @@
   $result = $rds->describeDBInstances([
     'DBInstanceIdentifier' => 'mp1-sg',
   ]);
-  $endpoint = $result['DBInstances']['Endpoint']['Address'];
-  echo "============ $endpoint ================";
+
+  $endpoint = $result['DBInstances'][0]['Endpoint']['Address'];
+
   //echo "begin database";
   $link = mysqli_connect($endpoint,"sandhyagupta","sandhya987","customerrecords") or die("Error " . mysqli_error($link));
   /* check connection */
@@ -89,7 +90,7 @@
   $res = $link->use_result();
   echo "Result set order...\n";
   while ($row = $res->fetch_assoc()) {
-    echo $row['id'] . " " . $row['email']. " " . $row['phone'];
+    echo $row['id'] . " " . $row['email']. " " . $row['phone']. " " . $row['createdat'];
   }
   $link->close();
   

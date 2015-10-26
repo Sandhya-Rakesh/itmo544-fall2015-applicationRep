@@ -23,8 +23,11 @@
     #'VpcSecurityGroupIds' => ['<string>', ...],
   ]);
 
-  #Create DB Instance Read Replica
-  /*$readreplicaresult = $rds->createDBInstanceReadReplica([
+
+  $result = $rds->waitUntil('DBInstanceAvailable',['DBInstanceIdentifier' => 'mp1-sg',]);
+
+  // Create DB Instance Read Replica
+  $readreplicaresult = $rds->createDBInstanceReadReplica([
     'AutoMinorVersionUpgrade' => true,
     'DBInstanceClass' => 'db.t2.micro',
     'DBInstanceIdentifier' => 'mp1-rr-sg', // REQUIRED
@@ -32,9 +35,7 @@
     'SourceDBInstanceIdentifier' => 'mp1-sg', // REQUIRED
   ]);
 
-  print "Created DB Instance Read Replica: \n"*/
-
-  $result = $rds->waitUntil('DBInstanceAvailable',['DBInstanceIdentifier' => 'mp1-sg',]);
+  print "Created DB Instance Read Replica: \n"
 
   // Create a table 
   $result = $rds->describeDBInstances([
@@ -42,7 +43,6 @@
   ]);
 
   $endpoint = $result['DBInstances'][0]['Endpoint']['Address'];
-  print "============\n". $endpoint . "================\n";
 
   $link = mysqli_connect($endpoint,"sandhyagupta","sandhya987","customerrecords") or die("Error " . mysqli_error($link)); 
   if (mysqli_connect_errno()) {
@@ -65,7 +65,10 @@
     PRIMARY KEY(id)
   )';
 
-  $con->query($sql);
+  if (mysqli_query($link, $create_table) === TRUE) {
+    printf("Table userdetails successfully created.\n");
+  }
+
 
 ?>
 

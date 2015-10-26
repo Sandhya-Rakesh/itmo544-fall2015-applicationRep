@@ -27,7 +27,7 @@
   $result = $rds->waitUntil('DBInstanceAvailable',['DBInstanceIdentifier' => 'mp1-sg',]);
 
   // Create DB Instance Read Replica
-  $readreplicaresult = $rds->createDBInstanceReadReplica([
+  /*$readreplicaresult = $rds->createDBInstanceReadReplica([
     'AutoMinorVersionUpgrade' => true,
     'DBInstanceClass' => 'db.t2.micro',
     'DBInstanceIdentifier' => 'mp1-rr-sg', // REQUIRED
@@ -35,7 +35,7 @@
     'SourceDBInstanceIdentifier' => 'mp1-sg', // REQUIRED
   ]);
 
-  print "Created DB Instance Read Replica: \n"
+  print "Created DB Instance Read Replica: \n"*/
 
   // Create a table 
   $result = $rds->describeDBInstances([

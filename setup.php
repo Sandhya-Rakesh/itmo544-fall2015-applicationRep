@@ -49,7 +49,6 @@
     printf("Connect failed: %s\n", mysqli_connect_error());
     exit();
   }
-  echo "Here is the result: " . $link;
 
   $create_table = 'CREATE TABLE IF NOT EXISTS userdetails  
   (

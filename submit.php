@@ -17,20 +17,20 @@
   print_r($_FILES);
   print "</pre>";
 
-  #use Aws\S3\S3Client;
+  use Aws\S3\S3Client;
   $s3 = new Aws\S3\S3Client([
       'version' => 'latest',
       'region'  => 'us-west-2'
   ]);
 
-  $bucket="nankurunaisa"
+  $bucket='nankurunaisa';
 
-  # AWS PHP SDK version 3 create bucket
+  // AWS PHP SDK version 3 create bucket
   $result = $s3->createBucket([
       'ACL' => 'public-read',
-      'Bucket' => $bucket
+      'Bucket' => $bucket,
   ]);
-  
+
   $s3->waitUntil('BucketExists', array('Bucket' => $bucket));
   
   try 
@@ -39,7 +39,7 @@
     $result = $s3->putObject([
       'ACL' => 'public-read',
       'Bucket' => $bucket,
-      'Key' => $uploadfile
+      'Key' => $uploadfile,
     ]); 
 
     // Print the URL to the object.
@@ -48,5 +48,49 @@
   } catch (S3Exception $e) {
     echo $e->getMessage() . "\n";
   }
+  
+  
+  $rds = new Aws\Rds\RdsClient([
+    'version' => 'latest',
+    'region'  => 'us-west-2'
+  ]);
+  
+  $result = $rds->describeDBInstances([
+    'DBInstanceIdentifier' => 'mp1-sg',
+  ]);
+  $endpoint = $result['DBInstances']['Endpoint']['Address'];
+  echo "============ $endpoint ================";
+  //echo "begin database";
+  $link = mysqli_connect($endpoint,"sandhyagupta","sandhya987","customerrecords") or die("Error " . mysqli_error($link));
+  /* check connection */
+  if (mysqli_connect_errno()) {
+    printf("Connect failed: %s\n", mysqli_connect_error());
+    exit();
+  }
+  /* Prepared statement, stage 1: prepare */
+  if (!($stmt = $link->prepare("INSERT INTO userdetails (id,uname,email,phone,s3rawurl,s3finishedurl,jpgfilename,status) VALUES (NULL,?,?,?,?,?,?,?)"))) {
+     echo "Prepare failed: (" . $link->errno . ") " . $link->error;
+  }
+  $uname = $_POST['username'];
+  $email = $_POST['useremail'];
+  $phone = $_POST['userphone'];
+  $s3rawurl = $url; //  $result['ObjectURL']; from above
+  $filename = basename($_FILES['userfile']['name']);
+  $s3finishedurl = "none";
+  $status =0;
+  $stmt->bind_param("ssssssi",$uname,$email,$phone,$s3rawurl,$s3finishedurl,$filename,$status);
+  if (!$stmt->execute()) {
+    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+  }
+  printf("%d Row inserted.\n", $stmt->affected_rows);
+  /* explicit close recommended */
+  $stmt->close();
+  $link->real_query("SELECT * FROM userdetails");
+  $res = $link->use_result();
+  echo "Result set order...\n";
+  while ($row = $res->fetch_assoc()) {
+    echo $row['id'] . " " . $row['email']. " " . $row['phone'];
+  }
+  $link->close();
   
 ?>

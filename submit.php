@@ -25,13 +25,27 @@
 
   $bucket='nankurunaisa';
 
+  if(!$s3->doesBucketExist($bucket)) {
+    // AWS PHP SDK version 3 create bucket
+    $result = $s3->createBucket([
+      'ACL' => 'public-read',
+      'Bucket' => $bucket,
+    ]);
+
+    $s3->waitUntil('BucketExists', array('Bucket' => $bucket));
+	echo "$bucket Created"
+  }
+  else{
+	echo "$bucket Already Exists"
+  }
+
   // AWS PHP SDK version 3 create bucket
-  $result = $s3->createBucket([
+  /*$result = $s3->createBucket([
       'ACL' => 'public-read',
       'Bucket' => $bucket,
   ]);
 
-  $s3->waitUntil('BucketExists', array('Bucket' => $bucket));
+  $s3->waitUntil('BucketExists', array('Bucket' => $bucket));*/
   
   try 
   {

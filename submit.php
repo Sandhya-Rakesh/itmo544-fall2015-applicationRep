@@ -25,6 +25,7 @@
 
   $bucket='nankurunaisa';
 
+  // Create a bucket only if it doesnt exists
   if(!$s3->doesBucketExist($bucket)) {
     // AWS PHP SDK version 3 create bucket
     $result = $s3->createBucket([
@@ -33,20 +34,9 @@
     ]);
 
     $s3->waitUntil('BucketExists', array('Bucket' => $bucket));
-	echo "$bucket Created"
-  }
-  else{
-	echo "$bucket Already Exists"
+	echo "$bucket Created";
   }
 
-  // AWS PHP SDK version 3 create bucket
-  /*$result = $s3->createBucket([
-      'ACL' => 'public-read',
-      'Bucket' => $bucket,
-  ]);
-
-  $s3->waitUntil('BucketExists', array('Bucket' => $bucket));*/
-  
   try 
   {
     // Upload data.

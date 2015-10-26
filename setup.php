@@ -45,6 +45,10 @@
   print "============\n". $endpoint . "================\n";
 
   $link = mysqli_connect($endpoint,"sandhyagupta","sandhya987","customerrecords") or die("Error " . mysqli_error($link)); 
+  if (mysqli_connect_errno()) {
+    printf("Connect failed: %s\n", mysqli_connect_error());
+    exit();
+  }
   echo "Here is the result: " . $link;
 
   $create_table = 'CREATE TABLE IF NOT EXISTS userdetails  

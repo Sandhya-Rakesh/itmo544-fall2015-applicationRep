@@ -44,6 +44,8 @@
       'ACL' => 'public-read',
       'Bucket' => $bucket,
       'Key' => $uploadfile,
+      'SourceFile'   => $uploadfile,
+      'ContentType' =>'image/jpeg',
     ]); 
 
     // Print the URL to the object.
@@ -90,12 +92,19 @@
   printf("%d Row inserted.\n", $stmt->affected_rows);
   /* explicit close recommended */
   $stmt->close();
-  $link->real_query("SELECT * FROM userdetails");
+
+  //Redirect to gallery.php
+  $host  = $_SERVER['HTTP_HOST'];
+  $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+  $extra = 'gallery.php';
+  header("Location: http://$host$uri/$extra");
+ 
+ /* $link->real_query("SELECT * FROM userdetails");
   $res = $link->use_result();
   echo "Result set order...\n";
   while ($row = $res->fetch_assoc()) {
     echo $row['id'] . " " . $row['email']. " " . $row['phone']. " " . $row['createdat'];
   }
-  $link->close();
+  $link->close();*/
   
 ?>

@@ -63,7 +63,7 @@
 			//echo "Result set order...\n";
 			while ($row = $res->fetch_assoc()) 
 			{
-			  echo '<a href="' . $row["s3rawurl"] . '" title="' . $row["jpgfilename"] . '"data-gallery><img src="' . $row["s3rawurl"] . 'width="75" height="75"></a>';
+			  echo '<a href="' . $row["s3rawurl"] . '" title="' . $row["jpgfilename"] . '"data-gallery><img src="' . $row["s3rawurl"] . '"width="75" height="75"></a>';
 			}
 			$link->close();
 		?>	

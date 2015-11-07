@@ -23,7 +23,7 @@
       'region'  => 'us-west-2'
   ]);
 
-  $bucket='nankurunaisa_'.rand();
+  $bucket='nankurunaisa-'.rand();
 
   // Create a bucket only if it doesnt exists
   if(!$s3->doesBucketExist($bucket)) {

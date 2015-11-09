@@ -99,12 +99,5 @@
   $extra = 'gallery.php';
   header("Location: http://$host$uri/$extra");
  
- /* $link->real_query("SELECT * FROM userdetails");
-  $res = $link->use_result();
-  echo "Result set order...\n";
-  while ($row = $res->fetch_assoc()) {
-    echo $row['id'] . " " . $row['email']. " " . $row['phone']. " " . $row['createdat'];
-  }
-  $link->close();*/
   
 ?>

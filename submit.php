@@ -92,6 +92,7 @@
   printf("%d Row inserted.\n", $stmt->affected_rows);
   /* explicit close recommended */
   $stmt->close();
+  $link->close();
 
   //Redirect to gallery.php
   $host  = $_SERVER['HTTP_HOST'];

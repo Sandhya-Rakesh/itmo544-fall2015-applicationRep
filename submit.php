@@ -92,13 +92,42 @@
   printf("%d Row inserted.\n", $stmt->affected_rows);
   /* explicit close recommended */
   $stmt->close();
-  $link->close();
+
+  //Inserting data into usersubscriptiondetails table
+  if (!($stmt = $link->prepare("INSERT IGNORE INTO usersubscriptiondetails (id,email) VALUES (NULL,?)"))) {
+     echo "Prepare failed: (" . $link->errno . ") " . $link->error;
+  }
+  $stmt->bind_param("ssssssi",$email);
+  if (!$stmt->execute()) {
+    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+  }
+  printf("%d Row inserted into usersubscriptiondetails table.\n", $stmt->affected_rows);
+  /* explicit close recommended */
+  $stmt->close();
+
+  //$link->close();
 
   //Redirect to gallery.php
-  $host  = $_SERVER['HTTP_HOST'];
+  /*$host  = $_SERVER['HTTP_HOST'];
   $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
   $extra = 'gallery.php';
-  header("Location: http://$host$uri/$extra");
- 
+  header("Location: http://$host$uri/$extra");*/
+	
+  $link->real_query("SELECT subscriptionarn FROM usersubscriptiondetails where email='$email'");
+  $res = $link->use_result();
+  echo "Result set order...\n";
+  while ($row = $res->fetch_assoc()) {
+	  
+	if(!isset($row['subscriptionarn']))
+	{
+		echo "empty";
+	}
+	else
+	{
+		echo $row['subscriptionarn'];
+	}
+    
+  }
+  $link->close(); 
   
 ?>
